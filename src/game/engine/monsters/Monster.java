@@ -30,7 +30,32 @@ public abstract class Monster implements Comparable<Monster> {
 	public String getName() {
 		return name;
 	}
-
+	abstract public void executePowerupEffect(Monster opponentMonster);
+	public boolean  isConfused() {
+		if (confusionTurns != 0) {
+			return true;
+		}
+		return false;
+	}
+	public  void move(int distance){
+		position+=distance;
+	}
+	public void alterEnergy(int energy) {
+		if (shielded && energy <0){
+			setShielded(false);
+		}
+		else{
+			this.energy+=energy;
+		}
+	}
+	public void decrementConfusion(){
+		if (confusionTurns>0){
+			confusionTurns-=1;
+		}
+		if (confusionTurns==0){
+			role=originalRole;
+		}
+	}
 	public String getDescription() {
 		return description;
 	}
