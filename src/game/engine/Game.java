@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import game.engine.dataloader.DataLoader;
+import game.engine.exceptions.InvalidMoveException;
 import game.engine.exceptions.OutOfEnergyException;
 import game.engine.monsters.*;
 
@@ -62,15 +63,52 @@ public class Game {
 	private int rollDice(){
 		return (int)(Math.random()*6)+1;
 	}	
-	public void usePowerup() {
-		if(current.getEnergy()>=Constants.POWERUP_COST){
+	public void usePowerup() throws OutOfEnergyException{
+		if(current.getEnergy()<Constants.POWERUP_COST){
 			try{
 				current.executePowerupEffect(opponent);
 				}
 			catch(OutOfEnergyException e){
 				System.err.println(e.getMessage());
 			}
+			current.alterEnergy(Constants.POWERUP_COST);
 	}
+	}
+	public void playTurn() throws InvalidMoveException{
+		if(current.isFrozen()){
+			 current.setFrozen(false);
+		}
+		else{
+			if(current.getConfusionTurns()>0){ // this condition is added by me 
+				current.decrementConfusion();
+				switchTurn(); // added by me as logic 
+			}
+			else{
+			int dice = rollDice();
+			current.move(dice);
+			switchTurn(); // added by me as logic 
+			}
+		}
+	}
+	private void switchTurn(){
+		if (current==player){
+			current=opponent;
+		}
+		else{
+			current=player;
+		}
+	}
+	private boolean checkWinCondition(Monster monster){
+		if (monster.getPosition()==99&&monster.getEnergy()>= 1000){
+			return true;
+		}
+		return false;
+	}
+	public Monster getWinner(){
+		if(checkWinCondition(current)){
+			return current;			
+		}
+		return null;
 
 	}
 }
