@@ -14,6 +14,7 @@ public abstract class Monster implements Comparable<Monster> {
 	private boolean shielded;
 	private int confusionTurns;
 	
+	abstract public void executePowerupEffect(Monster opponentMonster);
 	public Monster(String name, String description, Role originalRole, int energy) {
 		super();
 		this.name = name;
@@ -30,7 +31,7 @@ public abstract class Monster implements Comparable<Monster> {
 	public String getName() {
 		return name;
 	}
-	abstract public void executePowerupEffect(Monster opponentMonster);
+	
 	public boolean  isConfused() {
 		if (confusionTurns != 0) {
 			return true;
