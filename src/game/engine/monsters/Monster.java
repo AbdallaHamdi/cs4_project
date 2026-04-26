@@ -46,7 +46,7 @@ public abstract class Monster implements Comparable<Monster> {
 			setShielded(false);
 		}
 		else{
-			this.energy+=energy;
+			this.setConfusionTurns(this.getEnergy()+energy);
 		}
 	}
 	public void decrementConfusion(){
